@@ -130,9 +130,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'home'
-LOGIN_URL = 'login'
+LOGIN_URL = 'login'  
+LOGIN_REDIRECT_URL = 'profile' 
+LOGOUT_REDIRECT_URL = 'login'
 
 from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
