@@ -1,4 +1,5 @@
 from django.urls import path
+from . import views
 from django.contrib.auth import views as auth_views
 from .views import (
     register_view,
@@ -21,6 +22,8 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('profile/', profile_view, name='profile'),
     path('profile/edit/', edit_profile_view, name='edit_profile'),
+    path('search/', views.search_posts, name='search-posts'),
+    path('tags/<str:tag_name>/', views.posts_by_tag, name='posts-by-tag'),
 
     # Post URLs
     path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),

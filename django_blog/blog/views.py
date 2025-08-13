@@ -8,6 +8,8 @@ from django.urls import reverse_lazy
 from django.contrib.auth import views as auth_views
 from .models import Post, Comment
 from .forms import CustomUserCreationForm, PostForm, CommentForm
+from django.db.models import Q
+from taggit.models import Tag
 
 # --------- User Views ---------
 def register_view(request):
@@ -131,3 +133,19 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('post-detail', kwargs={'pk': self.object.post.pk})
+
+def search_posts(request):
+    query = request.GET.get('q')
+    results = []
+    if query:
+        results = Post.objects.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
+    return render(request, 'blog/search_results.html', {'query': query, 'results': results})
+
+def posts_by_tag(request, tag_name):
+    tag = get_object_or_404(Tag, name=tag_name)
+    posts = Post.objects.filter(tags__name__in=[tag_name])
+    return render(request, 'blog/posts_by_tag.html', {'tag': tag, 'posts': posts})
