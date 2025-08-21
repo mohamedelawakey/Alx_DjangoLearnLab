@@ -49,7 +49,7 @@ class FollowUserView(generics.GenericAPIView):
         return Response(
             {"message": f"You are now following {user_to_follow.username}"},
             status=status.HTTP_200_OK
-    )
+        )
 
 class UnfollowUserView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
@@ -60,4 +60,13 @@ class UnfollowUserView(generics.GenericAPIView):
         return Response(
             {"message": f"You have unfollowed {user_to_unfollow.username}"},
             status=status.HTTP_200_OK
-    )
+        )
+    
+class UserListView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = UserRegisterSerializer
+
+    def get(self, request):
+        users = CustomUser.objects.all()  
+        serializer = self.get_serializer(users, many=True)
+        return Response(serializer.data)
